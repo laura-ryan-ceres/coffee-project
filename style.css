@@ -1,5 +1,7 @@
 body {
     font-family: 'Indie Flower', cursive;
+    background-color: bisque;
+    color: #A0522D;
     /*font-family: 'Source Code Pro', monospace;*/
 }
 
@@ -44,11 +46,18 @@ td, th {
     grid-template-columns: 50% 50%;
 }
 
+
 .jumbotron {
     background-image: url("coffee-shop.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    border: 10px solid black;
     height: 350px;
 }
 
+#flex-box-container{
+    display: flex;
+    justify-content: space-evenly;
+    /*flex-direction: column;*/
+}
