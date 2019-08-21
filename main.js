@@ -25,10 +25,12 @@ function updateCoffees(e) {
     var filteredCoffees = [];
 
     if (selectedRoast === 'all') {
+
         coffees.forEach(function (coffee) {
             if (coffee.name.toLowerCase().indexOf((searchCoffee).toLowerCase()) >= 0) {
                 filteredCoffees.push(coffee);
             }
+
         });
     } else {
         coffees.forEach(function (coffee) {
