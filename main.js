@@ -44,8 +44,13 @@ function updateCoffees(e) {
 // from http://www.ncausa.org/About-Coffee/Coffee-Roasts-Guide
 //
 // Check if there is a coffee storage
-if (coffeeStorage) {
+// var storedArray = JSON.parse(localStorage.getItem("storedArray"));
+var exist= JSON.parse(localStorage.getItem("coffees"));
+
+if (exist) {
     // Get the info from the local storage
+    var coffees= JSON.parse(localStorage.getItem("coffees"));
+
 } else {
     var coffees = [
         {id: 1, name: 'Light City', roast: 'light'},
