@@ -1,53 +1,21 @@
 "use strict";
 
-function renderCoffee(coffee) {
-    var html = '<div class="coffee">';
-    html += '<div>' + '<span class="coffeeName">' + coffee.name + '</span>' + " " + '<span class="coffeeRoast">' + coffee.roast + '</span>' + '</div>';
-    html += '</div>';
-
-    return html;
-}
-
-
-function renderCoffees(coffees) {
-    var html = '';
-    console.log(coffees);
-    for (var i = 0; i < coffees.length; i++) {
-        html += renderCoffee(coffees[i]);
-    }
-    return html;
-}
-
-function updateCoffees(e) {
-    e.preventDefault(); // don't submit the form, we just want to update the data
-    var selectedRoast = roastSelection.value;
-    var searchCoffee = document.getElementById('searchCoffee').value;
-    var filteredCoffees = [];
-
-    if (selectedRoast === 'all') {
-        coffees.forEach(function (coffee) {
-            if (coffee.name.toLowerCase().indexOf((searchCoffee).toLowerCase()) >= 0) {
-                filteredCoffees.push(coffee);
-            }
-        });
-    } else {
-        coffees.forEach(function (coffee) {
-            if (coffee.roast === selectedRoast && (coffee.name.toLowerCase().indexOf((searchCoffee).toLowerCase()) >= 0)) {
-                filteredCoffees.push(coffee);
-            }
-        });
-    }
-
-    tbody.innerHTML = renderCoffees(filteredCoffees);
-}
+/**
+ *
+ * Variables
+ *
+ */
 
 // from http://www.ncausa.org/About-Coffee/Coffee-Roasts-Guide
 //
 // Check if there is a coffee storage
-if (coffeeStorage) {
-    // Get the info from the local storage
-} else {
-    var coffees = [
+//
+
+var coffees = JSON.parse(localStorage.getItem("coffees"));
+
+if (coffees == null) {
+    // There is no coffee storage
+    coffees = [
         {id: 1, name: 'Light City', roast: 'light'},
         {id: 2, name: 'Half City', roast: 'light'},
         {id: 3, name: 'Cinnamon', roast: 'light'},
@@ -65,25 +33,92 @@ if (coffeeStorage) {
     ];
 }
 
-var coffeeStorage = [];
+/**
+ *
+ * Builds HTML for the coffee name
+ *
+ */
+
+function renderCoffee(coffee) {
+    var html = '<div class="coffee">';
+    html += '<div>' + '<span class="coffeeName">' + coffee.name + '</span>' + " " + '<span class="coffeeRoast">' + coffee.roast + '</span>' + '</div>';
+    html += '</div>';
+
+    return html;
+}
+
+/**
+ *
+ * Display the list of coffees
+ */
+
+function renderCoffees(coffees) {
+    var html = '';
+    console.log(coffees);
+    for (var i = 0; i < coffees.length; i++) {
+        html += renderCoffee(coffees[i]);
+    }
+    return html;
+}
+
+/**
+ *
+ * Updates the coffee array based on the search criteria
+ *
+ */
+
+function updateCoffees(e) {
+    e.preventDefault(); // don't submit the form, we just want to update the data
+    var selectedRoast = roastSelection.value;
+    var searchCoffee = document.getElementById('searchCoffee').value;
+    var filteredCoffees = [];
+
+    // Display all of the roast types
+    if (selectedRoast === 'all') {
+        coffees.forEach(function (coffee) {
+            // Selects the coffee based on the coffee name
+            if (coffee.name.toLowerCase().indexOf((searchCoffee).toLowerCase()) >= 0) {
+                filteredCoffees.push(coffee);
+            }
+        });
+    } else {
+        // Selects the coffee based on the roast type a nd the coffee name
+        coffees.forEach(function (coffee) {
+            if (coffee.roast === selectedRoast && (coffee.name.toLowerCase().indexOf((searchCoffee).toLowerCase()) >= 0)) {
+                filteredCoffees.push(coffee);
+            }
+        });
+    }
+
+    tbody.innerHTML = renderCoffees(filteredCoffees);
+}
+
+/**
+ *
+ * Add a new coffee to the array
+ *
+ */
 
 function addCoffee(e) {
     e.preventDefault(); // don't submit the form, we just want to update the data
     var roastType = document.getElementById('roast-type').value;
     var coffeeName = document.querySelector('#new-coffee').value;
     var newId = coffees.length;
+
+    // Create the new coffee object
     var newItem = {
         id: newId,
         name: coffeeName,
         roast: roastType
     };
 
+    // Add the new coffee to the array
     coffees.push(newItem);
     // Save the information to local local Storage
     console.log(coffeeStorage);
     localStorage.setItem('coffees', JSON.stringify(coffees));
-    //
-    console.log(newItem);
+
+    // Display all of the coffees including the new one
 
     var filteredCoffees = [];
     coffees.forEach(function (coffee) {
@@ -93,6 +128,13 @@ function addCoffee(e) {
     document.getElementById("roast-selection").selectedIndex = 0;
     tbody.innerHTML = renderCoffees(filteredCoffees);
 }
+
+/**
+ *
+ * Event listener
+ *
+ * @type {Element}
+ */
 
 var tbody = document.querySelector('#coffees');
 var submitButton = document.querySelector('#submit');
